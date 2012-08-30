@@ -37,7 +37,7 @@ class HeaderController extends Spine.Controller
     
     if Spine.Route.path? and Spine.Route.path.indexOf("transcribe") !=-1
       @html require("views/transcription/header")
-      @el.css('padding-top', '25px')
+      #@el.css('padding-top', '25px')
 
     else if Spine.Route.path is "/"
       @html require('views/home/header')

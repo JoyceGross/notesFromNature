@@ -125,7 +125,7 @@
 
         $(".transcribing").css({ height: $(document).height() });
 
-        // Core._createLoader($el);
+         Core._createLoader($el);
 
         Core.$el.append(Core._createSkipTooltip());
 
@@ -181,7 +181,9 @@
 
       var $transcribing = $(document).find(".transcribing");
 
-      $transcribing.bind('dragstart', function(event) { event.preventDefault(); });
+      $transcribing.bind('dragstart', function(e) {
+        e.preventDefault();
+      });
 
       $transcribing.on("click", function(e){
         e.preventDefault();
@@ -200,6 +202,7 @@
         initialypos = e.pageY,
 
         selectionId = "selection";
+      console.log(initialxpos, initialypos);
 
         $el.append($(document.createElement("span")).attr("id", selectionId));
 
@@ -225,7 +228,7 @@
           if (cursorypos > initialypos) { // bottom
             style = { bottom: "auto", top: initialypos, height: (cursorypos - initialypos) };
           } else { // top
-            style = { top: "auto", height: initialypos - cursorypos , bottom: dh - initialypos};
+            style = { top: cursorypos, height: initialypos - cursorypos , bottom: dh + initialypos};
           }
           s = $.extend(s, style);
           s = $.extend({ visibility: "visible" }, s);
@@ -263,6 +266,8 @@
 
       // Add loader to the stage
       $el.append(loader);
+
+      console.log($el, loader);
 
       // Bind load image
       $el.find('img').imagesLoaded();
@@ -340,7 +345,10 @@
       $legend.find(".button.next").on("click", Core._showSelector);
 
       $(".transcribing").append($legend);
-      $legend.animate({opacity: 1, bottom: 90}, 150);
+
+      var top = $(window).height() - 90;
+      $legend.animate({opacity: 1, top: top }, 150);
+
     },
 
     /**
