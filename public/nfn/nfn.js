@@ -17,13 +17,14 @@
   window.JST = window.JST || {};
 
   nfn.files = [
-    "../vendor/jquery.min.js",
-    "../vendor/jquery-ui-1.8.23.custom.min.js",
-    "../vendor/jquery.jscrollpane.min.js",
-    "../vendor/jquery.imagesloaded.min.js",
-    "../vendor/spin.min.js",
-    "../vendor/underscore-min.js",
-    "../vendor/backbone-min.js",
+
+    //"vendor/jquery.min.js",
+    //"vendor/jquery-ui-1.8.23.custom.min.js",
+    //"vendor/jquery.jscrollpane.min.js",
+    //"vendor/jquery.imagesloaded.min.js",
+    //"vendor/spin.min.js",
+    //"vendor/underscore-min.js",
+    //"vendor/backbone-min.js",
 
     // Core
     'core/config.js',

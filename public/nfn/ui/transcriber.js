@@ -228,7 +228,10 @@ nfn.ui.view.Highlight = nfn.ui.view.Widget.extend({
     this.setDimensions(dimensions);
   },
 
-  close: function() {
+  close: function(e) {
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
     if (this.parent) {
       this.parent.launcher.$startButton.addClass("disabled");
@@ -392,7 +395,10 @@ nfn.ui.view.SernacWidget = nfn.ui.view.Widget.extend({
 
   },
 
-  ok: function() {
+  ok: function(e) {
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
     this.parent.saveCurrentStep();
 
@@ -401,14 +407,19 @@ nfn.ui.view.SernacWidget = nfn.ui.view.Widget.extend({
 
   },
 
-  showSkipPane: function() {
+  showSkipPane: function(e) {
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
   },
 
-  finish: function() {
+  finish: function(e) {
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
     this.parent.finish();
-
   },
 
   clearInput: function() {
@@ -565,7 +576,7 @@ nfn.ui.view.Launcher = nfn.ui.view.Widget.extend({
   start: function(e) {
 
     e.preventDefault();
-    e.stopPropagation();
+    e.stopImmediatePropagation();
 
     if (!this.model.get("disabled")) this.parent.addMagnifier();
 

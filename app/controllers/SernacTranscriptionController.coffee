@@ -10,9 +10,20 @@ class SernacTranscriptionController extends Spine.Controller
     @currentSubject= subject
     @render()
     @delay =>
-      console.log $('div.transcribing')
-      $('div.transcribing').transcriberSernac();
-    , 300
+      nfn.load "nfn/", ->
+        transcriberModel = new nfn.ui.model.Sernac()
+
+        transcriber = new nfn.ui.view.SernacTranscriber({
+          model: transcriberModel
+        })
+
+        url = "http://assets.javierarce.com/biotrans/transcriber_sernac_01.png"
+        transcriber.loadPhoto(url)
+
+        transcriber.showPhoto(0)
+        window.transcriber = transcriber
+
+    , 500
     
   render:=>
     @html require('views/transcription/sernac')
