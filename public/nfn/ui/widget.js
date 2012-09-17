@@ -1,64 +1,128 @@
-// Widget
-// =================================
+// Widget --------------------------------------
 
 nfn.ui.model.Widget = Backbone.Model.extend({ });
 
 nfn.ui.view.Widget = nfn.core.View.extend({
 
-  className: "widget",
+  defaults: {
+    speed: 300
+  },
 
-  events: {
+  setLeft: function(x, animated) {
 
-    "click .button.save" : "save"
+    var y = this.model.get("top");
+    this.setPosition(x, y, animated);
+
+    return this;
 
   },
 
-  initialize: function() {
+  setTop: function(y, animated) {
 
-    _.bindAll( this, "save", "toggle", "toggleDraggable", "toggleResizable", "onStopDragging", "onStopResizing" );
+    var x = this.model.get("left");
+    this.setPosition(x, y, animated);
 
-    this.template = new nfn.core.Template({
-      template: this.options.template
-    });
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden",    this.toggle);
-    this.model.bind("change:draggable", this.toggleDraggable);
-    this.model.bind("change:resizable", this.toggleResizable);
-
-    this.parent = this.options.parent;
+    return this;
 
   },
 
-  save: function() {
+  setWidth: function(w, animated) {
 
-    var transcription = new nfn.ui.model.Transcription(this.getCurrentStatus());
-    this.parent.transcriptions.push(transcription);
+    this.model.set("width", w);
 
-    console.log("STATUS", this.parent.transcriptions.length, this.getCurrentStatus());
+    if (animated) {
+      this.$el.animate({ width: w }, this.defaults.speed);
+    } else {
+      this.$el.css({ width: w });
+    }
 
-  },
-
-  setPosition: function(left, top) {
-
-    this.model.set("top", top);
-    this.model.set("left", left);
-
-    this.$el.css({ top: top, left: left});
+    return this;
 
   },
 
-  getPosition: function() {
+  setHeight: function(h, animated) {
 
-    return { x: this.model.get("left"), y: this.model.get("top") };
+    this.model.set("height", h);
+
+    if (animated) {
+      this.$el.animate({ height: h }, this.defaults.speed);
+    } else {
+      this.$el.css({ height: h });
+    }
+
+    return this;
 
   },
 
-  /*
-  * Returns the dimensions and position of the widget.
-  */
-  getCurrentStatus: function() {
+
+  setSize: function(w, h, animated) {
+
+    this.model.set("width", w);
+    this.model.set("height", h);
+
+    if (animated) {
+      this.$el.animate({ width: w, height: h }, this.defaults.speed);
+    } else {
+      this.$el.css({ width: w, height: h });
+    }
+
+    return this;
+
+  },
+
+  setDimensions: function(dimensions) {
+
+    this.setPosition(dimensions.x, dimensions.y);
+    this.setSize(dimensions.w, dimensions.h);
+
+    return this;
+
+  },
+
+  width: function() {
+
+    if ( this.model.get("width") == undefined )
+      this.model.set("width", this.$el.width());
+
+    return this.model.get("width");
+
+  },
+
+  height: function() {
+
+    if ( this.model.get("height") == undefined )
+      this.model.set("height", this.$el.height());
+
+    return this.model.get("height");
+
+  },
+
+  left: function() {
+
+    if ( this.model.get("left") == undefined )
+      this.model.set("left", this.$el.position().left);
+
+    return this.model.get("left");
+
+  },
+
+  top: function() {
+
+    if ( this.model.get("top") == undefined )
+      this.model.set("top", this.$el.position().top);
+
+    return this.model.get("top");
+
+  },
+
+
+  getSize: function() {
+
+    return { w: this.model.get("width"), h: this.model.get("height") };
+
+  },
+
+  getDimensions: function() {
 
     return {
       x: this.model.get("left"),
@@ -69,105 +133,111 @@ nfn.ui.view.Widget = nfn.core.View.extend({
 
   },
 
-  setSize: function(w, h) {
+  setPosition: function(left, top, animated) {
 
-    this.model.set("width", w);
-    this.model.set("height", h);
+    this.model.set("top", top);
+    this.model.set("left", left);
 
-    this.$el.css({ width: w, height: h });
-
-  },
-
-  getSize: function() {
-
-    return { w: this.model.get("width"), h: this.model.get("height") };
-
-  },
-
-  setResizable: function(resizable) {
-
-    this.model.set("resizable", resizable);
-
-  },
-
-  toggleResizable: function() {
-
-    var that = this;
-
-    if (this.model.get("resizable")) {
-
-      this.$el.resizable({ disabled: false, stop: this.onStopResizing })
-
+    if (animated) {
+      this.$el.animate({ top: top, left: left }, this.defaults.speed);
     } else {
+      this.$el.css({ top: top, left: left });
+    }
 
-      this.$el.resizable({ disabled: true });
-      this.$el.find(".ui-resizable-handle").remove(); // remove the handlers
+    return this;
 
+  },
+
+  getPosition: function() {
+
+    return { x: this.model.get("left"), y: this.model.get("top") };
+
+  },
+
+  absoluteVerticalCenter: function(animated) {
+
+    var x = $(document).width() /2 - this.width()/2;
+
+    this.model.set("left", x);
+
+    if (animated) {
+      this.$el.animate({ left: x }, this.defaults.speed );
+    } else {
+      this.$el.css({ left: x });
     }
 
   },
 
-  setDraggable: function(draggable) {
-
-    this.model.set("draggable", draggable);
-
-  },
-
-  toggleDraggable: function() {
+  animate: function(properties, animated) {
 
     var that = this;
 
-    if (this.model.get("draggable")) {
+    _.each(properties, function(value, property) {
+      that.model.set(property, value);
+    });
 
-      this.$el.draggable({ disabled: false, stop: this.onStopDragging })
-
+    if (animated) {
+      this.$el.animate(properties, this.defaults.speed );
     } else {
-
-      this.$el.draggable({ disabled: true });
-
+      this.$el.css(properties);
     }
 
   },
 
-  onStopDragging: function(e, el) {
+  verticalCenter: function(w, animated) {
 
-    this.setPosition(el.position.left, el.position.top);
+    var x = w/2 - this.width()/2;
+
+    this.model.set("left", x);
+
+    if (animated) {
+      this.$el.animate({ left: x }, this.defaults.speed );
+    } else {
+      this.$el.css({ left: x });
+    }
 
   },
 
-  onStopResizing: function(e, el) {
+  center: function(w, h, animated) {
 
-    this.setSize(el.size.width, el.size.height);
+    var x = w/2 - this.width()/2;
+    var y = h/2 - this.height()/2;
+
+    this.model.set("left", x);
+    this.model.set("top", y);
+
+    if (animated) {
+      this.$el.animate({ left: x, top: y }, this.defaults.speed );
+    } else {
+      this.$el.css({ left: x, top: y });
+    }
 
   },
 
   toggle: function() {
 
     if (this.model.get("hidden")) {
-      this.$el.fadeOut(250);
+
+      this.$el.fadeOut(this.defaults.speed);
+
     } else {
-      this.$el.fadeIn(250);
+
+      this.$el.fadeIn(this.defaults.speed);
+
     }
 
   },
 
   show: function() {
     this.model.set("hidden", false);
+
+    return this;
   },
 
   hide: function() {
     this.model.set("hidden", true);
-  },
 
-  render: function() {
-
-    var $el = this.$el;
-
-    $el.append(this.template.render());
-
-    this.$saveButton = $el.find(".button.save");
-
-    return $el;
+    return this;
   }
 
 });

@@ -64,6 +64,28 @@ describe("common.ui.view.Widget", function() {
 
   });
 
+  it("should allow to set the top position of the widget", function() {
+
+    widget.setPosition(100, 200);
+    widget.setTop(500);
+
+    expect(widget.$el.css("top")).toEqual("500px");
+    expect(widget.$el.css("left")).toEqual("100px");
+    expect(widget.getPosition()).toEqual({ y: 500, x: 100 });
+
+  });
+
+  it("should allow to set the left position of the widget", function() {
+
+    widget.setPosition(100, 200);
+    widget.setLeft(500);
+
+    expect(widget.$el.css("top")).toEqual("200px");
+    expect(widget.$el.css("left")).toEqual("500px");
+    expect(widget.getPosition()).toEqual({ x: 500, y: 200 });
+
+  });
+
   it("should allow to set the height of the widget", function() {
 
     widget.setSize(100, 200);
@@ -100,12 +122,152 @@ describe("common.ui.view.Widget", function() {
 
 
 /*
+* common.ui.view.Tooltip
+*
+*/
+describe("common.ui.view.Tooltip", function() {
+
+  var widget;
+
+  beforeEach(function() {
+
+    widget = new nfn.ui.view.Tooltip({
+      model: new nfn.ui.model.Tooltip(),
+      template: $("#tooltip-template").html()
+    });
+
+  });
+
+  afterEach(function() {
+
+    widget.clean();
+
+  });
+
+  it("should allow to change the template", function() {
+
+    widget.render();
+
+    widget.model.set("template", "<span>Hola</span>");
+    expect(widget.$el.find("span").length).toEqual(1);
+
+  });
+
+  it("should have a title", function() {
+
+    widget.render();
+
+    expect(widget.$title).toEqual(widget.$el.find(".title"));
+    expect(widget.$el.find(".title").length).toBeTruthy();
+
+  });
+
+  it("should have a description", function() {
+
+    widget.render();
+
+    expect(widget.$description).toEqual(widget.$el.find(".description"));
+    expect(widget.$el.find(".description").length).toBeTruthy();
+
+  });
+
+  it("should have a main button", function() {
+
+    widget.render();
+
+    expect(widget.$mainButton).toEqual(widget.$el.find(".main"));
+    expect(widget.$el.find(".main").length).toBeTruthy();
+
+  });
+
+  it("should fire an event when the user clicks in the main button", function() {
+
+    widget.render();
+
+    var spy = spyOn(widget, 'onMainClick');
+
+    widget.delegateEvents();
+    widget.$mainButton.click();
+
+    expect(spy).toHaveBeenCalled();
+
+  });
+
+  it("should have a secondary button", function() {
+
+    widget.render();
+
+    expect(widget.$secondaryButton).toEqual(widget.$el.find(".secondary"));
+    expect(widget.$el.find(".secondary").length).toBeTruthy();
+
+  });
+
+  it("should fire an event when the user clicks in the secondary button", function() {
+
+    widget.render();
+
+    var spy = spyOn(widget, 'onSecondaryClick');
+
+    widget.delegateEvents();
+    widget.$secondaryButton.click();
+
+    expect(spy).toHaveBeenCalled();
+
+  });
+
+});
+
+/*
+* common.ui.view.StatusBar
+*
+*/
+describe("common.ui.view.StatusBar", function() {
+
+  var widget;
+
+  beforeEach(function() {
+
+    widget = new nfn.ui.view.StatusBar({
+      model: new nfn.ui.model.StatusBar({ title: "a", description: "b" }),
+      template: $("#statusbar-template").html()
+    });
+
+  });
+
+  afterEach(function() {
+
+    widget.clean();
+
+  });
+
+  it("should have a title", function() {
+    widget.render();
+    expect(widget.$title).toEqual(widget.$el.find(".title"));
+    expect(widget.$el.find('.title').length).toEqual(1);
+  });
+
+  it("should have a description", function() {
+    widget.render();
+    expect(widget.$description).toEqual(widget.$el.find(".description"));
+    expect(widget.$el.find('.description').length).toEqual(1);
+  });
+
+  it("should have a record counter", function() {
+    widget.render();
+    expect(widget.$counter).toEqual(widget.$el.find(".counter"));
+    expect(widget.$el.find('.counter').length).toEqual(1);
+  });
+
+
+});
+
+/*
 * common.ui.view.Highlight
 *
 */
 describe("common.ui.view.Highlight", function() {
 
-  var selection;
+  var widget;
 
   beforeEach(function() {
 
@@ -150,6 +312,19 @@ describe("common.ui.view.Highlight", function() {
     expect(widget.model.get("hidden")).toEqual(true);
   });
 
+  it("should fire an event on click", function() {
+
+    widget.render();
+
+    var spy = spyOn(widget, 'start');
+
+    widget.delegateEvents();
+    widget.$el.click();
+
+    expect(spy).toHaveBeenCalled();
+
+  });
+
 });
 
 
@@ -187,6 +362,10 @@ describe("common.ui.view.SernacTranscriber", function() {
 
   it("should have a helper", function() {
     expect(sernacTranscriber.helper).toBeDefined();
+  });
+
+  it("should have an status bar", function() {
+    expect(sernacTranscriber.statusBar).toBeDefined();
   });
 
   it("should have a highlight", function() {
@@ -279,6 +458,29 @@ describe("common.ui.view.SernacTranscriber", function() {
     expect(sernacTranscriber.selection.$el.css("height")).toEqual("90px");
   });
 
+  it("should add the cursor crosshair of the image when the transcribing begins", function() {
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+
+    sernacTranscriber.addHighlight(sernacTranscriber.selection.getDimensions());
+    sernacTranscriber.highlight.$closeButton.click();
+
+    expect(sernacTranscriber.$el.find(".photos").hasClass("selectable")).toEqual(true);
+  });
+
+  it("should remove the cursor crosshair of the image after a highlight is added", function() {
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+
+    sernacTranscriber.addHighlight(sernacTranscriber.selection.getDimensions());
+
+    expect(sernacTranscriber.$el.find(".photos").hasClass("selectable")).toEqual(false);
+  });
+
   it("should enable the start button after a highlight is added", function() {
 
     sernacTranscriber.addSelection();
@@ -344,7 +546,12 @@ describe("common.ui.view.SernacTranscriber", function() {
     sernacTranscriber.selection.$el.css("position", "absolute");
     sernacTranscriber.addMagnifier();
 
-    expect(sernacTranscriber.helper.$title.text()).toEqual("Record code");
+    waits(250);
+
+    runs(function () {
+      expect(sernacTranscriber.helper.$title.text()).toEqual("Record code");
+    });
+
   });
 
   it("should hide the launcher after the magnifier is added", function() {
@@ -357,6 +564,25 @@ describe("common.ui.view.SernacTranscriber", function() {
     sernacTranscriber.addMagnifier();
 
     expect(sernacTranscriber.launcher.model.get("hidden")).toEqual(true);
+  });
+
+  it("should set the currentRecord to zero on init", function() {
+    expect(sernacTranscriber.model.get("currentRecord")).toEqual(0);
+  });
+
+  it("should set the currentStep to zero when the magnifier is added", function() {
+
+    sernacTranscriber.$el.find(".photos").append("<img />");
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+
+    expect(sernacTranscriber.model.get("currentStep")).toEqual(-1);
+
+    sernacTranscriber.addMagnifier();
+
+    expect(sernacTranscriber.model.get("currentStep")).toEqual(0);
   });
 
   it("should show the sernac transcriber after the magnifier is added", function() {
@@ -431,6 +657,32 @@ describe("common.ui.view.SernacTranscriber", function() {
 
   });
 
+  it("should allow to increase the record counter", function() {
+
+    sernacTranscriber.model.set("currentRecord", 3);
+    sernacTranscriber.nextRecord();
+
+    expect(sernacTranscriber.model.get("currentRecord")).toEqual(4);
+
+  });
+
+  it("should change the record counter in the status bar when updating the currentRecord", function() {
+
+    sernacTranscriber.model.set("currentRecord", 3);
+    sernacTranscriber.nextRecord();
+
+    expect(sernacTranscriber.model.get("currentRecord")).toEqual(4);
+    expect(sernacTranscriber.statusBar.$counter.text()).toEqual("4");
+
+  });
+
+  it("should allow to decrease the record counter", function() {
+    sernacTranscriber.model.set("currentRecord", 3);
+    sernacTranscriber.previousRecord();
+
+    expect(sernacTranscriber.model.get("currentRecord")).toEqual(2);
+  });
+
   it("should allow to increase the step counter", function() {
     sernacTranscriber.model.set("stepsCount", 10);
     sernacTranscriber.model.set("currentStep", 5);
@@ -503,13 +755,21 @@ describe("common.ui.view.SernacTranscriber", function() {
 
     sernacTranscriber.nextStep();
 
-    expect(sernacTranscriber.helper.$el.find(".title").text()).toEqual("Genus & species");
-    expect(sernacTranscriber.helper.$el.find(".description").text()).toEqual("2 or 3 latin words in the first line, next to the margin.");
+    waits(450);
 
-    sernacTranscriber.previousStep();
+    runs(function() {
+      expect(sernacTranscriber.helper.$el.find(".title").text()).toEqual("Genus & species");
+      expect(sernacTranscriber.helper.$el.find(".description").text()).toEqual("2 or 3 latin words in the first line, next to the margin.");
 
-    expect(sernacTranscriber.helper.$el.find(".title").text()).toEqual("Record code");
-    expect(sernacTranscriber.helper.$el.find(".description").text()).toEqual("It's a 4 digit number located at the top right of the page.");
+      sernacTranscriber.previousStep();
+
+      waits(450);
+
+      runs(function() {
+        expect(sernacTranscriber.helper.$el.find(".title").text()).toEqual("Record code");
+        expect(sernacTranscriber.helper.$el.find(".description").text()).toEqual("It's a 4 digit number located at the top right of the page.");
+      });
+    });
 
   });
 
@@ -659,40 +919,172 @@ describe("common.ui.view.Transcriber", function() {
   it("should allow to load a photo", function() {
 
     var url = "http://24.media.tumblr.com/tumblr_m98dbeEnhw1reyyato1_1280.png";
-    transcriber.loadPhoto(url);
+    transcriber.addPhoto(url);
     expect(transcriber.photos.length).toEqual(1);
   });
 
-  //it("should show a photo", function() {
+  it("should append a photo to .photos", function() {
 
-    //var url = "http://24.media.tumblr.com/tumblr_m98dbeEnhw1reyyato1_1280.png";
-    //transcriber.loadPhoto(url);
-    //transcriber.showPhoto(0);
+    sernacTranscriber.addPhoto("http://assets.javierarce.com/biotrans/transcriber_sernac_01.png");
+    sernacTranscriber.addPhoto("http://assets.javierarce.com/biotrans/transcriber_sernac_02.png");
 
-    //var $img = transcriber.$el.find(".photos img");
-    //expect($img.length).toEqual(1);
-    //expect($img.attr("src")).toEqual(url);
+    sernacTranscriber.showPhoto(0);
 
-  //});
+    waits(5100);
 
-  //it("should replace the loaded photo with a new one", function() {
+    runs(function() {
+      expect(sernacTranscriber.$el.find("img").length).toEqual(1);
+    });
 
-    //var // test photos
-    //url  = "http://24.media.tumblr.com/tumblr_m98dbeEnhw1reyyato1_1280.png";
-    //url2 = "http://assets.javierarce.com/spines.jpg";
+  });
 
-    //transcriber.loadPhoto(url);
-    //transcriber.loadPhoto(url2);
+  it("should add and show a photo", function() {
 
-    //transcriber.showPhoto(0);
-    //transcriber.showPhoto(1);
+    var url  = "http://assets.javierarce.com/biotrans/transcriber_sernac_01.png";
 
-    //var $img = transcriber.$el.find(".photos img");
+    sernacTranscriber.loadPhoto(url);
 
-    //expect($img.length).toEqual(1);
-    //expect($img.attr("src")).toEqual(url2);
+    waits(5000);
 
-  //});
+    runs(function() {
+      expect(sernacTranscriber.$el.find("img").length).toEqual(1);
+      expect(sernacTranscriber.$el.find("img").attr("src")).toEqual(url);
+    });
+
+  });
+
+  it("should append another photo", function() {
+
+    var url  = "http://assets.javierarce.com/biotrans/transcriber_sernac_01.png";
+    var url2 = "http://assets.javierarce.com/biotrans/transcriber_sernac_02.png";
+
+    sernacTranscriber.addPhoto(url);
+    sernacTranscriber.addPhoto(url2);
+
+    sernacTranscriber.showPhoto(0);
+
+    waits(5000);
+
+    runs(function() {
+      expect(sernacTranscriber.$el.find("img").length).toEqual(1);
+      expect(sernacTranscriber.$el.find("img").attr("src")).toEqual(url);
+
+      sernacTranscriber.showPhoto(1);
+
+      waits(5000);
+
+      runs(function() {
+        expect(sernacTranscriber.$el.find("img").length).toEqual(1);
+        expect(sernacTranscriber.$el.find("img").attr("src")).toEqual(url2);
+        expect(sernacTranscriber.$el.find("img").attr("src")).not.toEqual(url);
+      });
+
+    });
+
+  });
+
+  it("should hide the magnifier, helper, transcriber and backdrop when the user cliks in the finish button", function() {
+
+    sernacTranscriber.$el.find(".photos").append("<img />");
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+    sernacTranscriber.addMagnifier();
+
+    sernacTranscriber.transcriberWidget.$finishButton.click();
+
+    waits(500);
+
+    runs(function() {
+      expect(sernacTranscriber.backdrop.model.get("hidden")).toEqual(true);
+      expect(sernacTranscriber.helper.model.get("hidden")).toEqual(true);
+      expect(sernacTranscriber.magnifier.model.get("hidden")).toEqual(true);
+      expect(sernacTranscriber.transcriberWidget.model.get("hidden")).toEqual(true);
+    });
+
+  });
+
+  it("should increase the record number", function() {
+
+    sernacTranscriber.$el.find(".photos").append("<img />");
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+    sernacTranscriber.addMagnifier();
+
+    sernacTranscriber.transcriberWidget.$finishButton.click();
+
+    expect(sernacTranscriber.model.get("currentRecord")).toEqual(1);
+
+  });
+
+  it("should create a tooltip when the user cliks in the skip button", function() {
+
+    sernacTranscriber.$el.find(".photos").append("<img />");
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+    sernacTranscriber.addMagnifier();
+
+    sernacTranscriber.transcriberWidget.$skip.click();
+
+    expect(sernacTranscriber.transcriberWidget.$el.find(".tooltip").length).toEqual(1);
+    expect(sernacTranscriber.transcriberWidget.tooltip.model.get("hidden")).toEqual(false);
+
+  });
+
+  it("shouldn't create another tooltip when the user cliks in the skip button for the second time", function() {
+
+    sernacTranscriber.$el.find(".photos").append("<img />");
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+    sernacTranscriber.addMagnifier();
+
+    sernacTranscriber.transcriberWidget.$skip.click();
+    sernacTranscriber.transcriberWidget.$skip.click();
+
+    expect(sernacTranscriber.transcriberWidget.$el.find(".tooltip").length).toEqual(1);
+
+  });
+
+  it("should close the tooltip when the user clicks in the close button (secondary)", function() {
+
+    sernacTranscriber.$el.find(".photos").append("<img />");
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+    sernacTranscriber.addMagnifier();
+
+    sernacTranscriber.transcriberWidget.$skip.click();
+    sernacTranscriber.transcriberWidget.tooltip.$secondaryButton.click();
+
+    expect(sernacTranscriber.transcriberWidget.$el.find(".tooltip").length).toEqual(0);
+    expect(sernacTranscriber.transcriberWidget.tooltip).not.toBeDefined();
+
+  });
+
+  it("should skip the field when the user clicks in the skip button (main) of the tooltip", function() {
+
+    sernacTranscriber.$el.find(".photos").append("<img />");
+    sernacTranscriber.model.set("currentStep", 0);
+
+    sernacTranscriber.addSelection();
+    sernacTranscriber.updateSelection(10, 10, 100, 100);
+    sernacTranscriber.selection.$el.css("position", "absolute");
+    sernacTranscriber.addMagnifier();
+
+    sernacTranscriber.transcriberWidget.$skip.click();
+    sernacTranscriber.transcriberWidget.tooltip.$mainButton.click();
+
+    expect(sernacTranscriber.model.get("currentStep")).toEqual(1);
+
+  });
 
 });
 

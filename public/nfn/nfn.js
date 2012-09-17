@@ -17,14 +17,14 @@
   window.JST = window.JST || {};
 
   nfn.files = [
-
-    //"vendor/jquery.min.js",
-    //"vendor/jquery-ui-1.8.23.custom.min.js",
-    //"vendor/jquery.jscrollpane.min.js",
-    //"vendor/jquery.imagesloaded.min.js",
-    //"vendor/spin.min.js",
-    //"vendor/underscore-min.js",
-    //"vendor/backbone-min.js",
+    "vendor/jquery.min.js",
+    "vendor/jquery-ui-1.8.23.custom.min.js",
+    "vendor/jquery.jscrollpane.min.js",
+    "vendor/jquery.imagesloaded.min.js",
+    "vendor/spin.min.js",
+    "vendor/underscore-min.js",
+    "vendor/backbone-min.js",
+    "vendor/mustache.js",
 
     // Core
     'core/config.js',
@@ -34,7 +34,19 @@
     'core/view.js',
 
     // UI
-    'ui/transcriber.js',
+    'ui/widget.js',
+    'ui/spinner.js',
+    'ui/backdrop.js',
+    'ui/tooltip.js',
+    'ui/widgets.js',
+    'ui/statusbar.js',
+    'ui/herbarium/photos.js',
+    'ui/herbarium/launcher.js',
+    'ui/herbarium/magnifier.js',
+    'ui/herbarium/selection.js',
+    'ui/herbarium/highlight.js',
+    'ui/herbarium/helper.js',
+    'ui/transcriber.js'
 
   ];
 

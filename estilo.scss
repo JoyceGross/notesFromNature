@@ -1,5 +1,4 @@
-
-body.transcribingScreen .transcriber.sernac {
+.transcriber.sernac {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -14,7 +13,6 @@ body.transcribingScreen .transcriber.sernac {
   -ms-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
-
   .statusbar {
     position: fixed;
     top: 0;
@@ -34,26 +32,37 @@ body.transcribingScreen .transcriber.sernac {
     background-image: -o-linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
     background-image: -ms-linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
     background-image: linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
-
     .left {
       float: left;
       height: 60px;
       margin: 0;
       padding: 20px 0 0 24px;
     }
-
     .right {
       position: relative;
       float: right;
       height: 55px;
       width: 90px;
       padding: 25px 24px 0 24px;
-
-      &::before { position: absolute; top: 0; left: 1px; height: 80px; width: 1px; content: ''; border-left: 1px solid rgba(255, 255, 255, 0.1); }
-      &::after { position: absolute; top: 0; left: 0; height: 80px; width: 1px; content: ''; border-left: 1px solid black; }
-
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 1px;
+        height: 80px;
+        width: 1px;
+        content: '';
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 80px;
+        width: 1px;
+        content: '';
+        border-left: 1px solid black;
+      }
     }
-
     h1 {
       font: bold 17px "Open Sans";
       color: white;
@@ -62,14 +71,12 @@ body.transcribingScreen .transcriber.sernac {
       margin: 0 0 3px 0;
       cursor: default;
     }
-
     h3 {
       font: normal 13px "Open Sans";
       color: #999;
       margin: 0;
       cursor: default;
     }
-
     .counter {
       position: absolute;
       top: 10px;
@@ -77,7 +84,6 @@ body.transcribingScreen .transcriber.sernac {
       color: white;
       font-weight: 800;
     }
-
     strong {
       float: left;
       width: 50px;
@@ -92,13 +98,13 @@ body.transcribingScreen .transcriber.sernac {
       text-transform: uppercase;
     }
   }
-
   .photos {
     margin: auto;
     text-align: center;
     z-index: 10;
-    &.selectable img { cursor: crosshair; }
-
+    &.selectable img {
+      cursor: crosshair;
+    }
     img {
       display: none;
       margin: auto;
@@ -148,7 +154,6 @@ body.transcribingScreen .transcriber.sernac {
     //filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
     z-index: 1000;
   }
-
   .loader {
     position: absolute;
     z-index: 2000;
@@ -170,10 +175,11 @@ body.transcribingScreen .transcriber.sernac {
     -webkit-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
     box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
-
-    .spinner { top: 20px; margin: auto; }
+    .spinner {
+      top: 20px;
+      margin: auto;
+    }
   }
-
   .tooltip {
     display: none;
     position: absolute;
@@ -191,7 +197,6 @@ body.transcribingScreen .transcriber.sernac {
     -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px 2px;
     box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px 2px;
     z-index: 10010;
-
     .tip {
       position: absolute;
       bottom: -6px;
@@ -201,34 +206,32 @@ body.transcribingScreen .transcriber.sernac {
       height: 6px;
       background: url("../images/transcribers/tooltip-tip.png") no-repeat;
     }
-
     .title {
       font: bold 11px "Open Sans";
       color: #191919;
       text-transform: uppercase;
     }
-
     .description {
       padding: 4px 0 0 0;
       margin: 0 0 10px 0;
       font: normal 13px "Helvetica",Arial;
       color: #666;
-      a { color: #666; text-decoration: underline; }
+      a {
+        color: #666;
+        text-decoration: underline;
+      }
     }
-
     .main {
       background: #F60;
       color: #FFF;
       font-weight: bold;
     }
-
     .secondary {
       background: #f1f1f1;
       color: #666;
       font-weight: normal;
       border: 1px solid #ccc;
     }
-
     .button {
       font-family: "Helvetica";
       padding: 5px 0;
@@ -236,7 +239,6 @@ body.transcribingScreen .transcriber.sernac {
       font-weight: 800;
     }
   }
-
   .highlight {
     display: none;
     position: absolute;
@@ -260,9 +262,9 @@ body.transcribingScreen .transcriber.sernac {
       right: -10px;
       background: url(../images/transcribers/close.png) no-repeat;
     }
-
-    &:hover { background: rgba(255, 103, 1, 0.35); }
-
+    &:hover {
+      background: rgba(255, 103, 1, 0.35);
+    }
   }
   .selection {
     position: absolute;
@@ -283,13 +285,16 @@ body.transcribingScreen .transcriber.sernac {
   }
   .launcher {
     z-index: 1001;
-
-    .button { float: right; }
-
-    span { position: relative; top: 5px; font: 13px "Open Sans"; color: white; }
-
+    .button {
+      float: right;
+    }
+    span {
+      position: relative;
+      top: 5px;
+      font: 13px "Open Sans";
+      color: white;
+    }
   }
-
   .sernac-widget {
     z-index: 10001;
     .right {
@@ -326,11 +331,9 @@ body.transcribingScreen .transcriber.sernac {
         font-size: 11px;
       }
     }
-
     .left {
       position: absolute;
       left: 10px;
-
       .input_field {
         float: left;
         position: relative;
@@ -342,13 +345,12 @@ body.transcribingScreen .transcriber.sernac {
         -ms-border-radius: 3px;
         -o-border-radius: 3px;
         border-radius: 3px;
-
         &.date {
           background: none;
           width: 405px;
-
-          .button.ok { float: right; }
-
+          .button.ok {
+            float: right;
+          }
           .date_field {
             background: #fff;
             height: 31px;
@@ -360,15 +362,18 @@ body.transcribingScreen .transcriber.sernac {
             float: left;
             margin: 0 7px 0 0;
           }
-
           input {
-            &.day { width: 80px; }
-            &.month { width: 120px; }
-            &.year { width: 90px; }
+            &.day {
+              width: 80px;
+            }
+            &.month {
+              width: 120px;
+            }
+            &.year {
+              width: 90px;
+            }
           }
-
         }
-
         input[type="text"] {
           border: none;
           outline: none;
@@ -382,7 +387,6 @@ body.transcribingScreen .transcriber.sernac {
           padding: 9px 8px 9px;
           background: none;
         }
-
         .button.ok {
           position: absolute;
           top: 2px;
@@ -393,11 +397,9 @@ body.transcribingScreen .transcriber.sernac {
           border: none;
           font-weight: 700;
         }
-
       }
     }
   }
-
   .magnifier {
     position: absolute;
     background: url("../images/transcribers/bg-transcriber.png");
@@ -439,48 +441,125 @@ body.transcribingScreen .transcriber.sernac {
   }
 }
 
-body.transcribingScreen .button {
+.button {
   display: inline-block;
   vertical-align: top;
   padding: 6px 13px 7px;
   border: 1px solid black;
-
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
-
-  background: #669933;
   font: 13px "Open Sans";
   line-height: 18px;
   color: white;
-
+  background: #669933;
   text-decoration: none;
   text-transform: uppercase;
   font-weight: 100;
-
-  &:hover { outline: none; background: #6EB422; } 
-  &:active { outline: none; background: #6EB422; padding: 7px 13px 6px; background: #6EB422; }
-
+  &:hover {
+    outline: none;
+    background: #6EB422;
+  }
+  &:active {
+    outline: none;
+    background: #6EB422;
+    padding: 7px 13px 6px;
+    background: #6EB422;
+  }
   &.disabled {
-
     opacity: 0.5;
     padding: 6px 13px 7px;
     background: #669933;
-
-    &:active { opacity: 0.5; padding: 6px 13px 7px; background: #669933; }
-    &:hover, &:active:hover { background: #669933; }
+    &:active {
+      opacity: 0.5;
+      padding: 6px 13px 7px;
+      background: #669933;
+    }
+    &:hover, &:active:hover {
+      background: #669933;
+    }
   }
 }
 
-.ui-resizable-handle { position: absolute; display: block; } 
-.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
-.ui-resizable-n { cursor: n-resize; width: 100%; height: 7px; position: absolute; top: -5px; left: 0; } 
-.ui-resizable-s { cursor: s-resize; width: 100%; height: 7px; position: absolute; bottom: -5px; left: 0; } 
-.ui-resizable-e { cursor: e-resize; width: 7px; height: 100%; position: absolute; top: 0; right: -5px; } 
-.ui-resizable-w { cursor: w-resize; width: 7px; height: 100%; position: absolute; top: 0; left: -5px; } 
-.ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; position: absolute; right: 1px; bottom: 1px; } 
-.ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; position: absolute; bottom: -5px; left: -5px; } 
-.ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; position: absolute; top: -5px; left: -5px; } 
-.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; position: absolute; top: -5px; bottom: -5px; } 
+.ui-resizable-handle {
+  position: absolute;
+  display: block;
+}
+
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle {
+  display: none;
+}
+
+.ui-resizable-n {
+  cursor: n-resize;
+  width: 100%;
+  height: 7px;
+  position: absolute;
+  top: -5px;
+  left: 0;
+}
+
+.ui-resizable-s {
+  cursor: s-resize;
+  width: 100%;
+  height: 7px;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+.ui-resizable-e {
+  cursor: e-resize;
+  width: 7px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: -5px;
+}
+
+.ui-resizable-w {
+  cursor: w-resize;
+  width: 7px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -5px;
+}
+
+.ui-resizable-se {
+  cursor: se-resize;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+}
+
+.ui-resizable-sw {
+  cursor: sw-resize;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  bottom: -5px;
+  left: -5px;
+}
+
+.ui-resizable-nw {
+  cursor: nw-resize;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+}
+
+.ui-resizable-ne {
+  cursor: ne-resize;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+}

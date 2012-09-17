@@ -1,0 +1,558 @@
+.transcriber.sernac {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  background: url("../images/transcribers/bg-transcriber.png");
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.transcriber.sernac .statusbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-width: 1024px;
+  height: 80px;
+  z-index: 1001;
+  -webkit-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.6);
+  background: #222222 url("../images/transcribers/bg.jpg") repeat-x;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, transparent), color-stop(50%, transparent), color-stop(70%, rgba(0, 0, 0, 0.3)), color-stop(100%, rgba(0, 0, 0, 0.5)));
+  background-image: -webkit-linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
+  background-image: -moz-linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
+  background-image: -o-linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
+  background-image: -ms-linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
+  background-image: linear-gradient(transparent, transparent 50%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5));
+}
+.transcriber.sernac .statusbar .left {
+  float: left;
+  height: 60px;
+  margin: 0;
+  padding: 20px 0 0 24px;
+}
+.transcriber.sernac .statusbar .right {
+  position: relative;
+  float: right;
+  height: 55px;
+  width: 90px;
+  padding: 25px 24px 0 24px;
+}
+.transcriber.sernac .statusbar .right::before {
+  position: absolute;
+  top: 0;
+  left: 1px;
+  height: 80px;
+  width: 1px;
+  content: '';
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+.transcriber.sernac .statusbar .right::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 80px;
+  width: 1px;
+  content: '';
+  border-left: 1px solid black;
+}
+.transcriber.sernac .statusbar h1 {
+  font: bold 17px "Open Sans";
+  color: white;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 0 3px 0; 
+  cursor: default;
+}
+.transcriber.sernac .statusbar h3 {
+  font: normal 13px "Open Sans";
+  color: #999;
+  margin: 0; 
+  cursor: default;
+}
+
+.transcriber.sernac .statusbar .counter {
+  position: absolute;
+  top: 10px;
+  font: bold 38px "Open Sans";
+  color: white;
+  font-weight: 800;
+}
+.transcriber.sernac .statusbar strong {
+  float: left;
+  width: 50px;
+  line-height: 0;
+  position: absolute;
+  top: 23px;
+  left: 55px;
+  line-height: 15px!important;
+  font: bold 12px "Open Sans";
+  color: white;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.transcriber.sernac .photos {
+  margin: auto;
+  text-align: center;
+  z-index: 10;
+}
+.transcriber.sernac .photos.selectable img {
+  cursor: crosshair;
+}
+.transcriber.sernac .photos img {
+  display: none;
+  margin: auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-box-shadow: 0 0 15px 13px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow: 0 0 15px 13px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 15px 13px rgba(0, 0, 0, 0.7);
+}
+.transcriber.sernac .bar {
+  display: none;
+  position: absolute;
+  width: 520px;
+  height: 55px;
+  padding: 11px 11px 11px 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  background: #333;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid black;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+.transcriber.sernac .backdrop {
+  display: none;
+  background-color: #000000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: .5;
+  //filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+  z-index: 1000;
+}
+.transcriber.sernac .loader {
+  position: absolute;
+  z-index: 2000;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -30px 0 0 -30px;
+  background: #333;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid black;
+  padding: 11px 11px 11px 10px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+}
+.transcriber.sernac .loader .spinner {
+  top: 20px;
+  margin: auto;
+}
+.transcriber.sernac .tooltip {
+  display: none;
+  position: absolute;
+  width: 175px;
+  right: 0;
+  padding: 12px 12px;
+  background: white;
+  text-align: center;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px 2px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px 2px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px 2px;
+  z-index: 10010;
+}
+.transcriber.sernac .tooltip .tip {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  margin-left: -6px;
+  width: 13px;
+  height: 6px;
+  background: url("../images/transcribers/tooltip-tip.png") no-repeat;
+}
+.transcriber.sernac .tooltip .title {
+  font: bold 11px "Open Sans";
+  color: #191919;
+  text-transform: uppercase;
+}
+.transcriber.sernac .tooltip .description {
+  padding: 4px 0 0 0;
+  margin: 0 0 10px 0;
+  font: normal 13px "Helvetica",Arial;
+  color: #666;
+}
+.transcriber.sernac .tooltip .description a {
+  color: #666;
+  text-decoration: underline;
+}
+.transcriber.sernac .tooltip .main {
+  background: #F60;
+  color: #FFF;
+  font-weight: bold;
+}
+.transcriber.sernac .tooltip .secondary {
+  background: #f1f1f1;
+  color: #666;
+  font-weight: normal;
+  border: 1px solid #ccc;
+}
+.transcriber.sernac .tooltip .button {
+  font-family: "Helvetica";
+  padding: 5px 0;
+  width: 83px;
+  font-weight: 800;
+}
+.transcriber.sernac .highlight {
+  display: none;
+  position: absolute;
+  background: rgba(255, 103, 1, 0.15);
+  border: 1px solid #FF6701;
+  cursor: pointer;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 300ms;
+  -moz-transition-duration: 300ms;
+  -o-transition-duration: 300ms;
+  transition-duration: 300ms;
+  z-index: 1000;
+}
+.transcriber.sernac .highlight .close {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: -10px;
+  right: -10px;
+  background: url(../images/transcribers/close.png) no-repeat;
+}
+.transcriber.sernac .highlight:hover {
+  background: rgba(255, 103, 1, 0.35);
+}
+.transcriber.sernac .selection {
+  position: absolute;
+  visibility: hidden;
+  background: rgba(255, 103, 1, 0.15);
+  border: 1px solid #FF6701;
+  cursor: nwse-resize;
+  z-index: 1000;
+}
+.transcriber.sernac .helper {
+  z-index: 1001;
+  font: 11px "Open Sans";
+  color: #fff;
+}
+.transcriber.sernac .helper .title {
+  text-transform: uppercase;
+  opacity: .8;
+}
+.transcriber.sernac .launcher {
+  z-index: 1001;
+}
+.transcriber.sernac .launcher .button {
+  float: right;
+}
+.transcriber.sernac .launcher span {
+  position: relative;
+  top: 5px;
+  font: 13px "Open Sans";
+  color: white;
+}
+.transcriber.sernac .sernac-widget {
+  z-index: 10001;
+}
+.transcriber.sernac .sernac-widget .right {
+  position: absolute;
+  right: 10px;
+}
+.transcriber.sernac .sernac-widget .right .skip {
+  position: relative;
+  float: left;
+  top: 10px;
+  margin: 0 15px 0 0;
+  color: white;
+  font: 12px "Helvetica", Arial;
+  line-height: 13px;
+  border-bottom: 1px solid #fff;
+  text-decoration: none;
+}
+.transcriber.sernac .sernac-widget .right .skip:hover {
+  border-bottom: 1px dashed #fff;
+}
+.transcriber.sernac .sernac-widget .right .step {
+  position: relative;
+  float: left;
+  top: 10px;
+  color: white;
+  font: 12px "Helvetica", Arial;
+  line-height: 13px;
+  text-transform: uppercase;
+}
+.transcriber.sernac .sernac-widget .right .button.finish {
+  position: relative;
+  float: left;
+  margin: 0 0 0 10px;
+  background: #FF7C09;
+  font-size: 11px;
+}
+.transcriber.sernac .sernac-widget .left {
+  position: absolute;
+  left: 10px;
+}
+.transcriber.sernac .sernac-widget .left .input_field {
+  float: left;
+  position: relative;
+  background: #fff;
+  width: 180px;
+  height: 31px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+.transcriber.sernac .sernac-widget .left .input_field.date {
+  background: none;
+  width: 405px;
+}
+.transcriber.sernac .sernac-widget .left .input_field.date .button.ok {
+  float: right;
+}
+.transcriber.sernac .sernac-widget .left .input_field.date .date_field {
+  background: #fff;
+  height: 31px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  float: left;
+  margin: 0 7px 0 0;
+}
+.transcriber.sernac .sernac-widget .left .input_field.date input.day {
+  width: 80px;
+}
+.transcriber.sernac .sernac-widget .left .input_field.date input.month {
+  width: 120px;
+}
+.transcriber.sernac .sernac-widget .left .input_field.date input.year {
+  width: 90px;
+}
+.transcriber.sernac .sernac-widget .left .input_field input[type="text"] {
+  border: none;
+  outline: none;
+  color: #666;
+  vertical-align: top;
+  font: bold 11px "Helvetica",Arial;
+  line-height: 13px!important;
+  text-transform: uppercase;
+  height: 13px;
+  margin: 0 5px 0 0;
+  padding: 9px 8px 9px;
+  background: none;
+}
+.transcriber.sernac .sernac-widget .left .input_field .button.ok {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 20px;
+  height: 19px;
+  padding: 4px;
+  border: none;
+  font-weight: 700;
+}
+.transcriber.sernac .magnifier {
+  position: absolute;
+  background: url("../images/transcribers/bg-transcriber.png");
+  overflow: hidden;
+  -webkit-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.4);
+  z-index: 1001;
+}
+.transcriber.sernac .magnifier.hollow {
+  background: rgba(255, 103, 1, 0.15);
+  border: 1px solid #FF6701;
+  cursor: pointer;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 500ms;
+  -moz-transition-duration: 500ms;
+  -o-transition-duration: 500ms;
+  transition-duration: 500ms;
+}
+.transcriber.sernac .magnifier.hollow:hover {
+  background: rgba(255, 103, 1, 0.3);
+}
+.transcriber.sernac .magnifier img {
+  position: absolute;
+  transform: scale(2);
+  transform-origin: 0 0;
+  -webkit-transform: scale(2);
+  -webkit-transform-origin: 0 0;
+  -o-transform: scale(2);
+  -o-transform-origin: 0 0;
+  -moz-transform: scale(2);
+  -moz-transform-origin: 0 0;
+}
+
+.button {
+  display: inline-block;
+  vertical-align: top;
+  padding: 6px 13px 7px;
+  border: 1px solid black;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  font: 13px "Open Sans";
+  line-height: 18px;
+  color: white;
+  background: #669933;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 100;
+}
+.button:hover, .button:active {
+  outline: none;
+  background: #6EB422;
+}
+.button:active {
+  padding: 7px 13px 6px;
+  background: #6EB422;
+}
+.button.disabled, .button.disabled:active {
+  opacity: 0.5;
+  padding: 6px 13px 7px;
+  background: #669933;
+}
+.button.disabled:hover, .button.disabled:active:hover {
+  background: #669933;
+}
+
+.ui-resizable-handle {
+  position: absolute;
+  display: block;
+}
+
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+  display: none;
+}
+
+.ui-resizable-n {
+  cursor: n-resize;
+  width: 100%;
+  height: 7px;
+  position: absolute;
+  top: -5px;
+  left: 0;
+}
+
+.ui-resizable-s {
+  cursor: s-resize;
+  width: 100%;
+  height: 7px;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+.ui-resizable-e {
+  cursor: e-resize;
+  width: 7px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: -5px;
+}
+
+.ui-resizable-w {
+  cursor: w-resize;
+  width: 7px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -5px;
+}
+
+.ui-resizable-se {
+  cursor: se-resize;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+}
+
+.ui-resizable-sw {
+  cursor: sw-resize;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  bottom: -5px;
+  left: -5px;
+}
+
+.ui-resizable-nw {
+  cursor: nw-resize;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+}
+
+.ui-resizable-ne {
+  cursor: ne-resize;
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+}

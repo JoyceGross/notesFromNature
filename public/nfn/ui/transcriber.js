@@ -1,770 +1,5 @@
-nfn.ui.model.Widget = Backbone.Model.extend({ });
+// TRANSCRIBER -----------------------------------
 
-nfn.ui.view.Widget = nfn.core.View.extend({
-
-  defaults: {
-    speed: 300
-  },
-  setWidth: function(w, animated) {
-
-    this.model.set("width", w);
-    var h = this.model.get("height");
-
-    if (animated) {
-      this.$el.animate({ width: w, height: h }, this.defaults.speed);
-    } else {
-      this.$el.css({ width: w, height: h });
-    }
-
-  },
-
-  setHeight: function(h, animated) {
-
-    this.model.set("height", h);
-    var w = this.model.get("width");
-
-    if (animated) {
-      this.$el.animate({ width: w, height: h }, this.defaults.speed);
-    } else {
-      this.$el.css({ width: w, height: h });
-    }
-
-  },
-
-
-  setSize: function(w, h, animated) {
-
-    this.model.set("width", w);
-    this.model.set("height", h);
-
-    if (animated) {
-      this.$el.animate({ width: w, height: h }, this.defaults.speed);
-    } else {
-      this.$el.css({ width: w, height: h });
-    }
-
-  },
-
-  setDimensions: function(dimensions) {
-
-    this.setPosition(dimensions.x, dimensions.y);
-    this.setSize(dimensions.w, dimensions.h);
-
-  },
-
-  width: function() {
-
-    if ( this.model.get("width") == undefined )
-      this.model.set("width", this.$el.width());
-
-    return this.model.get("width");
-
-  },
-
-  height: function() {
-
-    if ( this.model.get("height") == undefined )
-      this.model.set("height", this.$el.height());
-
-    return this.model.get("height");
-
-  },
-
-  left: function() {
-
-    if ( this.model.get("left") == undefined )
-      this.model.set("left", this.$el.position().left);
-
-    return this.model.get("left");
-
-  },
-
-  top: function() {
-
-    if ( this.model.get("top") == undefined )
-      this.model.set("top", this.$el.position().top);
-
-    return this.model.get("top");
-
-  },
-
-
-  getSize: function() {
-
-    return { w: this.model.get("width"), h: this.model.get("height") };
-
-  },
-
-  /*
-  * Returns the dimensions and position of the selection
-  */
-  getDimensions: function() {
-
-    return {
-      x: this.model.get("left"),
-      y: this.model.get("top"),
-      w: this.model.get("width"),
-      h: this.model.get("height")
-    };
-
-  },
-
-  setPosition: function(left, top, animated) {
-
-    this.model.set("top", top);
-    this.model.set("left", left);
-
-    if (animated) {
-      this.$el.animate({ top: top, left: left }, this.defaults.speed);
-    } else {
-      this.$el.css({ top: top, left: left });
-    }
-
-  },
-
-  getPosition: function() {
-
-    return { x: this.model.get("left"), y: this.model.get("top") };
-
-  },
-
-  center: function(w, h) {
-
-    //this.$el.css({ left: "50%", marginLeft: -1*this.width()/2 });
-    //this.$el.css({ top: "50%",  marginTop: -1*this.height()/2 });
-
-    var x = w/2 - this.width()/2;
-    var y = h/2 - this.height()/2;
-
-    this.model.set("left", x);
-    this.model.set("top", y);
-
-    this.$el.css({ left: x, top: y});
-
-  },
-
-  toggle: function() {
-
-    if (this.model.get("hidden")) {
-      this.$el.fadeOut(250);
-    } else {
-      this.$el.fadeIn(250);
-    }
-
-  },
-
-  show: function() {
-    this.model.set("hidden", false);
-  },
-
-  hide: function() {
-    this.model.set("hidden", true);
-  }
-
-});
-
-nfn.ui.model.Backdrop = Backbone.Model.extend({ });
-
-nfn.ui.view.Backdrop = nfn.ui.view.Widget.extend({
-
-  className: 'backdrop',
-
-  initialize: function() {
-
-    _.bindAll( this, "toggle" );
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden", this.toggle);
-
-    this.parent = this.options.parent;
-
-  },
-
-  render: function() {
-
-    return this.$el;
-
-  }
-
-});
-
-
-// Highlight ---------------------------------------
-
-nfn.ui.model.Highlight = Backbone.Model.extend({ });
-
-nfn.ui.view.Highlight = nfn.ui.view.Widget.extend({
-
-  className: 'highlight',
-
-  events: {
-
-    "click .close" : "close"
-
-  },
-
-  initialize: function() {
-
-    _.bindAll( this, "toggle", "close" );
-
-    this.template = new nfn.core.Template({
-      template: this.options.template
-    });
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden", this.toggle);
-
-    this.parent = this.options.parent;
-
-  },
-
-  create: function(dimensions) {
-    if (this.parent.$el.find("." + this.className).length <= 0) {
-      this.parent.$el.append(this.render());
-    }
-
-    this.setDimensions(dimensions);
-  },
-
-  close: function(e) {
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    if (this.parent) {
-      this.parent.launcher.$startButton.addClass("disabled");
-      this.parent.startTranscribing();
-    }
-
-    this.hide();
-  },
-
-  render: function() {
-
-    this.$el.append(this.template.render());
-
-    this.$closeButton = this.$el.find(".close");
-
-    return this.$el;
-
-  }
-
-});
-
-
-// Spinner ---------------------------------------
-
-nfn.ui.model.Spinner = Backbone.Model.extend({ });
-
-nfn.ui.view.Spinner = nfn.ui.view.Widget.extend({
-
-  className: 'loader',
-
-  initialize: function() {
-
-    _.bindAll( this, "toggle", "toggleSpin" );
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden",  this.toggle);
-    this.model.bind("change:animate", this.toggleSpin);
-
-    this.parent = this.options.parent;
-
-  },
-
-  toggleSpin: function() {
-
-    if (this.model.get("animate")) {
-      this.spinner =  new Spinner({ lines: 10, length: 3, width: 4, radius: 8, color: '#fff' }).spin();
-      this.$el.append( this.spinner.el);
-
-    } else {
-      this.spinner.stop();
-    }
-
-  },
-
-  spin: function() {
-    this.model.set("animate", true);
-
-  },
-
-  stop: function() {
-    this.model.set("animate", false);
-  },
-
-  render: function() {
-
-    return this.$el;
-
-  }
-
-});
-
-// Helper ---------------------------------------
-
-nfn.ui.model.Helper = Backbone.Model.extend({ });
-
-nfn.ui.view.Helper = nfn.ui.view.Widget.extend({
-
-  className: 'helper bar',
-
-  initialize: function() {
-
-    _.bindAll( this, "toggle", "updateTitle", "updateDescription" );
-
-    this.template = new nfn.core.Template({
-      template: this.options.template
-    });
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden", this.toggle);
-    this.model.bind("change:title", this.updateTitle);
-    this.model.bind("change:description", this.updateDescription);
-
-    this.parent = this.options.parent;
-
-  },
-
-  updateTitle: function() {
-    this.$title.text(this.model.get("title"));
-  },
-
-  updateDescription: function() {
-    this.$description.text(this.model.get("description"));
-  },
-
-  render: function() {
-
-    this.$el.append(this.template.render());
-
-    this.$title       = this.$el.find(".title");
-    this.$description = this.$el.find(".description");
-
-    return this.$el;
-
-  }
-
-});
-
-// SernacWidget --------------------------------------
-
-nfn.ui.model.SernacWidget = Backbone.Model.extend({ });
-
-nfn.ui.view.SernacWidget = nfn.ui.view.Widget.extend({
-
-  className: 'sernac-widget bar',
-
-  events: {
-
-    "click .button.ok" :     "ok",
-    "click .button.finish" : "finish",
-    "click .skip" :          "showSkipPane"
-
-  },
-
-  initialize: function() {
-
-    _.bindAll( this, "toggle", "updatePlaceholder", "updateType");
-
-    this.template = new nfn.core.Template({
-      template: this.options.template
-    });
-
-    this.templates = [];
-
-    this.templates["text"] = new nfn.core.Template({
-      template: '<input type="text" placeholder="" />'
-    });
-
-    this.templates["date"] = new nfn.core.Template({
-      template: $("#date-input-template").html()
-    });
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden",      this.toggle);
-    this.model.bind("change:placeholder", this.updatePlaceholder);
-    this.model.bind("change:type",        this.updateType);
-
-    this.parent = this.options.parent;
-
-  },
-
-  ok: function(e) {
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    this.parent.saveCurrentStep();
-
-    this.clearInput();
-    this.parent.nextStep();
-
-  },
-
-  showSkipPane: function(e) {
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-  },
-
-  finish: function(e) {
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    this.parent.finish();
-  },
-
-  clearInput: function() {
-
-    this.$input.val("");
-
-  },
-
-  resize: function() {
-
-    var type = this.model.get("type");
-
-    if (type == 'text') {
-      this.setWidth(520, true);
-    } else if ( type == 'date' ) {
-      this.setWidth(680, true);
-    }
-
-  },
-
-  getValue: function() {
-    var type = this.model.get("type");
-
-    if (type == 'text') {
-
-      return this.$input.val();
-
-    } else if ( type == 'date') {
-
-      var month = this.$el.find(".month").val();
-      var day   = this.$el.find(".day").val();
-      var year  = this.$el.find(".year").val();
-
-      if (month && day && year) {
-        return month + "/" + day + "/" + year;
-      } else {
-        return "";
-      }
-
-    }
-
-  },
-
-  updatePlaceholder: function() {
-    var type = this.model.get("type");
-
-    if (type == 'text') {
-
-      this.$input.attr("placeholder", this.model.get("placeholder"));
-
-    } else {
-
-      var placeholders = this.model.get("placeholder");
-
-      this.$input.find(".day").attr("placeholder", placeholders[0]);
-      this.$input.find(".month").attr("placeholder", placeholders[1]);
-      this.$input.find(".year").attr("placeholder", placeholders[2]);
-    }
-  },
-
-  updateType: function() {
-
-    var type = this.model.get("type");
-
-    this.$el.find(".input_field").removeClass("text");
-    this.$el.find(".input_field").removeClass("date");
-    this.$el.find(".input_field").addClass(type);
-
-    if (type == 'text') {
-
-      this.$el.find(".input_field input").remove();
-      this.$el.find(".input_field .date_field").remove();
-
-      this.$el.find(".input_field").append( this.templates[type].render() );
-      this.$input = this.$el.find('.input_field input');
-
-    } else {
-
-      this.$el.find(".input_field input").remove();
-      this.$el.find(".input_field").append( this.templates[type].render() );
-      this.$input = this.$el.find('.input_field input');
-
-    }
-
-    this.resize();
-
-  },
-
-  render: function() {
-
-    this.$el.append(this.template.render());
-
-    this.$okButton     = this.$el.find(".button.ok");
-    this.$skip         = this.$el.find(".skip");
-    this.$finishButton = this.$el.find(".button.finish");
-    this.$step         = this.$el.find(".step");
-    this.$input        = this.$el.find('.input_field input[type="text"]');
-
-    return this.$el;
-
-  }
-
-});
-
-// Launcher --------------------------------------
-
-nfn.ui.model.Launcher = Backbone.Model.extend({ });
-
-nfn.ui.view.Launcher = nfn.ui.view.Widget.extend({
-
-  events: {
-
-    "click .button.start" : "start"
-
-  },
-
-  className: "launcher bar",
-
-  initialize: function() {
-
-    _.bindAll( this, "start", "toggle", "toggleButton" );
-
-    this.template = new nfn.core.Template({
-      template: this.options.template
-    });
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden", this.toggle);
-    this.model.bind("change:disabled", this.toggleButton);
-
-    this.parent = this.options.parent;
-
-  },
-
-  toggleButton: function() {
-
-    if (this.model.get("disabled") == true) {
-      this.$startButton.addClass("disabled");
-    } else {
-      this.$startButton.removeClass("disabled");
-    }
-
-  },
-
-  enable: function() {
-    this.model.set("disabled", false);
-  },
-
-  disable: function() {
-    this.model.set("disabled", true);
-  },
-
-  start: function(e) {
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    if (!this.model.get("disabled")) this.parent.addMagnifier();
-
-  },
-
-  render: function() {
-
-    var $el = this.$el;
-
-    $el.append(this.template.render());
-
-    this.$startButton = $el.find(".button.start");
-    this.$message     = $el.find("span");
-
-    return $el;
-  }
-
-});
-
-// Magnifier ---------------------------------------
-
-nfn.ui.model.Magnifier = Backbone.Model.extend({ });
-
-nfn.ui.view.Magnifier  = nfn.ui.view.Widget.extend({
-
-  className: 'magnifier',
-
-  initialize: function() {
-
-    _.bindAll( this, "toggle" );
-
-    this.add_related_model(this.model);
-
-    this.model.bind("change:hidden", this.toggle);
-
-    this.parent = this.options.parent;
-
-
-  },
-
-  create: function(dimensions) {
-    if (this.parent.$el.find("." + this.className).length <= 0) {
-      this.parent.$el.append(this.render());
-    }
-
-    this.setDimensions(dimensions);
-  },
-
-  render: function() {
-
-    return this.$el;
-
-  }
-
-});
-
-// Selection ---------------------------------------
-
-nfn.ui.model.Selection = Backbone.Model.extend({ });
-
-nfn.ui.view.Selection  = nfn.ui.view.Widget.extend({
-
-  className: 'selection',
-
-  initialize: function() {
-
-    _.bindAll( this, "save" );
-
-    this.parent = this.options.parent;
-  },
-
-  isDefined: function() {
-
-    if (this.model.get("top") && this.model.get("left") && this.model.get("height") && this.model.get("width")) return true;
-    else return false;
-
-  },
-
-  setPosition: function(left, top) {
-
-    this.model.set("top", top);
-    this.model.set("left", left);
-
-    this.$el.css({ top: top, left: left});
-
-  },
-
-  save: function() {
-
-    //this.parent.saveCurrentStep();
-
-    //var transcription = new nfn.ui.model.Transcription(this.getDimensions());
-    //this.parent.transcriptions.push(transcription);
-
-    //console.log("STATUS", this.parent.transcriptions.length, this.getDimensions());
-
-  },
-
-  remove: function() {
-    this.$el.remove();
-  },
-
-  render: function() {
-
-    return this.$el;
-
-  }
-
-});
-
-// Transcriptions -------------------------------------
-
-nfn.ui.model.Transcription = Backbone.Model.extend({ });
-
-nfn.ui.collection.Transcriptions = Backbone.Collection.extend({
-  model: nfn.ui.model.Transcription,
-});
-
-// Photos
-// =================================
-
-nfn.ui.model.Photo = Backbone.Model.extend({
-});
-
-nfn.ui.view.Photo = nfn.core.View.extend({
-
-  initialize: function() {
-
-    _.bindAll( this, "toggle" );
-
-    this.parent = this.options.parent;
-
-    if (this.options.model === undefined) {
-      throw new TypeError("you should specify a model");
-    }
-
-    this.add_related_model(this.model);
-    this.model.bind("change:hidden", this.toggle);
-
-  },
-
-  toggle: function() {
-
-    if (this.model.get("hidden")) {
-      this.$el.fadeOut(250);
-    } else {
-      this.$el.fadeIn(250);
-    }
-
-  },
-
-  show: function() {
-    this.model.set("hidden", false);
-  },
-
-  hide: function() {
-    this.model.set("hidden", true);
-  },
-
-  render: function() {
-    var that = this;
-
-    var $img = this.$el = $("<img />");
-
-    this.$el.attr("src", this.model.get("url"));
-
-    this.$el.imagesLoaded(function() {
-      that.parent.$el.find(".photos").append(that.$el);
-
-      //$img.css({ left: $(document).width()/2 - $img.width()/2 });
-
-      that.show();
-      that.parent.startTranscribing();
-      that.parent.spinner.hide();
-    });
-
-  }
-
-});
-
-nfn.ui.collection.Photos = Backbone.Collection.extend({
-  model: nfn.ui.model.Photo
-});
-
-/*
-* Default transcriber model
-*
-**/
 nfn.ui.model.Transcriber = Backbone.Model.extend({
 
   defaults: {
@@ -774,10 +9,8 @@ nfn.ui.model.Transcriber = Backbone.Model.extend({
 
 });
 
-/*
-* Double page transcriber model
-*
-**/
+// DOUBLE PAGE TRANSCRIBER --------------------------------
+
 nfn.ui.model.DoublePage = nfn.ui.model.Transcriber.extend({
 
   defaults: {
@@ -786,14 +19,22 @@ nfn.ui.model.DoublePage = nfn.ui.model.Transcriber.extend({
 
 });
 
-/*
-* Sernac transcriber model
-*
-**/
+// SERNAC PAGE TRANSCRIBER -----------------------------
+
 nfn.ui.model.Sernac = nfn.ui.model.Transcriber.extend({
 
   defaults: {
     type: 'sernac'
+  },
+
+  nextRecord: function() {
+    var currentRecord = this.get("currentRecord");
+    this.set("currentRecord", currentRecord + 1);
+  },
+
+  previousRecord: function() {
+    var currentRecord = this.get("currentRecord");
+    this.set("currentRecord", currentRecord - 1);
   },
 
   nextStep: function() {
@@ -821,8 +62,7 @@ nfn.ui.model.Sernac = nfn.ui.model.Transcriber.extend({
 
 });
 
-// Transcriber
-// =================================
+// TRANSCRIBER ---------------------------------
 
 nfn.ui.view.Transcriber = nfn.core.View.extend({
 
@@ -847,14 +87,31 @@ nfn.ui.view.Transcriber = nfn.core.View.extend({
     var that = this;
 
     this.$el.append(this.spinner.render());
-    //this.spinner.setPosition(100, 200);
-    this.spinner.spin();
+    this.spinner.show().spin();
 
     var photo = this.photos.at(i);
-    photo.get("view").render();
+
+    if (photo) {
+      photo.get("view").render();
+    }
+
   },
 
   loadPhoto: function(url) {
+
+    var photo = new nfn.ui.view.Photo({
+      model: new nfn.ui.model.Photo({ url: url }),
+      parent: this
+    });
+
+    photo.model.set("view", photo);
+    this.photos.push(photo.model);
+
+    this.showPhoto(this.photos.length - 1);
+
+  },
+
+  addPhoto: function(url) {
 
     var photo = new nfn.ui.view.Photo({
       model: new nfn.ui.model.Photo({ url: url }),
@@ -920,6 +177,8 @@ nfn.ui.view.DoublePage = nfn.ui.view.Transcriber.extend({
   }
 });
 
+// SERNAC TRANSCRIBER ------------------------------------------
+
 nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
 
   initialize: function() {
@@ -978,9 +237,14 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
       }
     ];
 
-    this.model.set("currentRecord", -1);
+    this.model.set("currentRecord", 0);
+
     this.model.set("currentStep", -1);
     this.model.set("stepsCount", this.guide.length);
+
+    this.model.bind("change:currentRecord", function(model) {
+      that.statusBar.$counter.text(model.get("currentRecord"));
+    });
 
     this.model.bind("change:currentStep", function() {
 
@@ -1038,6 +302,20 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
 
     this.addView(this.helper);
 
+    // Loads the helper
+    this.statusBar = new nfn.ui.view.StatusBar({
+
+      model: new nfn.ui.model.StatusBar({
+        title: "Herbarium Collection",
+        description: "from The Natural History Museum of London"
+      }),
+
+      template: $("#statusbar-template").html(),
+      parent: this
+    });
+
+    this.addView(this.statusBar);
+
     // Loads the magnifier
     this.magnifier = new nfn.ui.view.Magnifier({
       model: new nfn.ui.model.Magnifier(),
@@ -1064,18 +342,22 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
     this.addView(this.launcher);
 
     this.render();
+
   },
 
   finish: function() {
 
-    console.log(this.selection.model.toJSON(), this.transcriptions.toJSON()[0]);
+    //console.log(this.selection.model.toJSON(), this.transcriptions.toJSON()[0]);
 
-    /*this.magnifier.hide();
+    this.backdrop.hide();
+    this.magnifier.hide();
     this.helper.hide();
     this.transcriberWidget.hide();
-    this.backdrop.hide();
 
-    this.showPhoto(1);*/
+    this.nextRecord();
+
+    // TODO: request next photo and the URL here
+    this.loadPhoto("http://assets.javierarce.com/biotrans/transcriber_sernac_02.png");
 
   },
 
@@ -1125,6 +407,7 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
 
     this.highlight.show();
     this.highlight.create(dimensions);
+    this.$el.find(".photos").removeClass("selectable");
     this.launcher.$startButton.removeClass("disabled");
 
   },
@@ -1144,10 +427,9 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
       w = dimensions.w,
       h = dimensions.h;
 
-      this.updateSelection(x, y, x+w, y+h);
-      //this.selection.save();
+      this.model.set("currentStep", 0);
 
-      //console.log(x,y,w,h);
+      this.updateSelection(x, y, x+w, y+h);
 
       if (w < 480) w = 540;
       if (h < 350) h = 350;
@@ -1167,13 +449,19 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
 
       this.backdrop.show();
 
-      this.helper.show();
-      this.helper.setPosition(this.magnifier.left(), this.magnifier.top() - this.helper.height() - 30 );
+      var magnifierWidth = this.magnifier.width();
 
-      this.model.set("currentStep", 0);
+      var // add the helper widget
+      helperX = this.magnifier.left(),
+      helperY = this.magnifier.top() - this.helper.height() - 35;
 
-      this.transcriberWidget.show();
-      this.transcriberWidget.setPosition(this.magnifier.left(), this.magnifier.top() + this.magnifier.height() + 20);
+      this.helper.setWidth(magnifierWidth).setPosition(helperX, helperY).show();
+
+      var // add the transcriber widget
+      twX = this.magnifier.left(),
+      twY = this.magnifier.top() + this.magnifier.height() + 10;
+
+      this.transcriberWidget.setWidth(magnifierWidth).setPosition(twX, twY).show();
 
       if ($.browser.msie && $.browser.version == 8) {
         $img2x.css({ top: -1*selection_y, left: -1*selection_x });
@@ -1193,11 +481,16 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
   },
 
   startTranscribing: function() {
-    this.launcher.setPosition($(document).width()/2 - this.launcher.width()/2, $(document).height() - this.launcher.height() - 100 );
-    this.launcher.show();
 
+    if (this.launcher.model.get("hidden")) {
+      this.launcher.setPosition($(document).width()/2 - this.launcher.width()/2, $(document).height() - this.launcher.height() - 100 );
+      this.launcher.show();
+    }
+
+    this.$el.find(".photos").addClass("selectable");
     this.$el.find(".photos").on("mousedown", this.onMouseDown);
     this.$el.on("mouseup",   this.onMouseUp);
+
   },
 
   onMouseUp: function() {
@@ -1248,6 +541,7 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
     this.transcriberWidget.model.set("type", stepGuide.type);
 
   },
+
   updatePlaceholder: function() {
 
     var
@@ -1287,7 +581,15 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
 
     }
 
-    console.log("STATUS", this.transcriptions.toJSON());
+    //console.log("STATUS", this.transcriptions.toJSON());
+  },
+
+  nextRecord: function() {
+    this.model.nextRecord();
+  },
+
+  previousRecord: function() {
+    this.model.previousRecord();
   },
 
   nextStep: function() {
@@ -1305,10 +607,16 @@ nfn.ui.view.SernacTranscriber = nfn.ui.view.Transcriber.extend({
     this.$el.append(this.backdrop.render());
     this.$el.append(this.launcher.render());
     this.$el.append(this.helper.render());
+    this.$el.append(this.statusBar.render());
     this.$el.append(this.transcriberWidget.render());
 
     // Adds the photo placeholder
     this.$el.append('<div class="photos" />');
+
+    // This prevents the image to be draggable (hack for Firefox)
+    $(document).on("dragstart", ".photos img", function() {
+      return false;
+    });
 
     $("body").append(this.$el);
 

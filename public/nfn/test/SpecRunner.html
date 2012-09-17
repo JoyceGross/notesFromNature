@@ -7,14 +7,14 @@
   <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.2.0/jasmine_favicon.png">
   <link rel="stylesheet" type="text/css" href="lib/jasmine-1.2.0/jasmine.css">
 
-  <script type="text/javascript" src="../../vendor/jquery.min.js"></script>
-  <script type="text/javascript" src="../../vendor/jquery-ui-1.8.23.custom.min.js"></script>
-  <script type="text/javascript" src="../../vendor/jquery.imagesloaded.min.js"></script>
-  <script type="text/javascript" src="../../vendor/jquery.jscrollpane.min.js"></script>
-  <script type="text/javascript" src="../../vendor/spin.min.js"></script>
-  <script type="text/javascript" src="../../vendor/underscore-min.js"></script>
-  <script type="text/javascript" src="../../vendor/backbone-min.js"></script>
-  <script type="text/javascript" src="../../vendor/mustache.js"></script>
+  <script type="text/javascript" src="../vendor/jquery.min.js"></script>
+  <script type="text/javascript" src="../vendor/jquery-ui-1.8.23.custom.min.js"></script>
+  <script type="text/javascript" src="../vendor/jquery.imagesloaded.min.js"></script>
+  <script type="text/javascript" src="../vendor/jquery.jscrollpane.min.js"></script>
+  <script type="text/javascript" src="../vendor/spin.min.js"></script>
+  <script type="text/javascript" src="../vendor/underscore-min.js"></script>
+  <script type="text/javascript" src="../vendor/backbone-min.js"></script>
+  <script type="text/javascript" src="../vendor/mustache.js"></script>
 
   <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine.js"></script>
   <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine-html.js"></script>
@@ -31,6 +31,18 @@
   <script type="text/javascript" src="../core/template.js"></script>
   <script type="text/javascript" src="../core/view.js"></script>
 
+  <script type="text/javascript" src="../ui/widget.js"></script>
+  <script type="text/javascript" src="../ui/widgets.js"></script>
+  <script type="text/javascript" src="../ui/spinner.js"></script>
+  <script type="text/javascript" src="../ui/backdrop.js"></script>
+  <script type="text/javascript" src="../ui/tooltip.js"></script>
+  <script type="text/javascript" src="../ui/statusbar.js"></script>
+  <script type="text/javascript" src="../ui/herbarium/launcher.js"></script>
+  <script type="text/javascript" src="../ui/herbarium/photos.js"></script>
+  <script type="text/javascript" src="../ui/herbarium/magnifier.js"></script>
+  <script type="text/javascript" src="../ui/herbarium/selection.js"></script>
+  <script type="text/javascript" src="../ui/herbarium/helper.js"></script>
+  <script type="text/javascript" src="../ui/herbarium/highlight.js"></script>
   <script type="text/javascript" src="../ui/transcriber.js"></script>
 
   <!-- SPECS -->
@@ -103,6 +115,25 @@
     <input type="text" name="day" class="day" placeholder="day" /> 
     <input type="text" name="month" class="month" placeholder="month" /> 
     <input type="text" name="year" class="year" placeholder="year" />
+  </script>
+
+  <script type="text/template" id="tooltip-template">
+    <strong class="title">Title</strong>
+    <div class="description">Description</div>
+
+    <a href="#" class="button main">Skip</a> 
+    <a href="#" class="button secondary">Close</a>
+  </script>
+
+  <script type="text/template" id="statusbar-template">
+    <div class="left">
+      <h1 class="title">{{ title }}</h1>
+      <h3 class="description">{{ description }}</h3>
+    </div>
+    <div class="right">
+      <div class="counter">0</div>
+      <h2>{{ title }}</h2>
+    </div>
   </script>
 
 </head>
